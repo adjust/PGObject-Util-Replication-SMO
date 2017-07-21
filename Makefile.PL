@@ -20,8 +20,9 @@ WriteMakefile(
     PREREQ_PM => {
 	'Moo' => 1,
 	'DBI' => 1,
-	'PGObject::Util::PGConfig' => 1,
-	'PGObject::Util::Replication::Slot' => 1,
+	'DBD::Pg' => 3,
+	'PGObject::Util::PGConfig' => 0,
+	'PGObject::Util::Replication::Slot' => 0,
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES => 'PGObject-Util-Replication-SMO-*' },
