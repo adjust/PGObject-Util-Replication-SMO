@@ -4,7 +4,7 @@ use Data::Dumper;
 use PGObject::Util::Replication::SMO;
 
 plan skip_all => 'DB_TESTING not set' unless $ENV{DB_TESTING};
-plan tests => 3;
+plan tests => 4;
 
 my $master = PGObject::Util::Replication::SMO->new();
 my $pmaster = PGObject::Util::Replication::SMO->new(persist_connect => 1);
@@ -36,6 +36,7 @@ is($pmaster->connect(), $pmaster->connect(), 'got a persistent connection');
 =head3 Superuser and replica role testing
 
 =cut
-
 lives_ok { $master->can_manage } 'We can determine if we can manage the db';
+lives_ok { $master->is_recovering } 'We can determine if we are in recovery';
+
 

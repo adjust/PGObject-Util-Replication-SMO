@@ -15,11 +15,11 @@ PGObject::Util::Replication::SMO - Replication Server Management Objects!
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =cut
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 
 =head1 SYNOPSIS
@@ -145,7 +145,7 @@ while master systems should generally not be.
 
 sub is_recovering {
     my ($self) = @_;
-    my $dbh = $self->dbh();
+    my $dbh = $self->connect();
     my $sth = $dbh->prepare('select pg_is_in_recovery()');
     $sth->execute;
     return ($sth->fetchrow_array)[0];

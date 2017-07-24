@@ -13,13 +13,13 @@
 
 #     ABSTRACT_FROM => q[lib/PGObject/Util/Replication/SMO.pm]
 #     AUTHOR => [q[Chris Travers <chris.travers@adjust.com>]]
-#     BUILD_REQUIRES => { Test::More=>q[0] }
+#     BUILD_REQUIRES => { Test::More=>q[0], Test::Exception=>q[0] }
 #     CONFIGURE_REQUIRES => { ExtUtils::MakeMaker=>q[0] }
 #     LICENSE => q[bsd]
 #     MIN_PERL_VERSION => q[5.006]
 #     NAME => q[PGObject::Util::Replication::SMO]
 #     PL_FILES => {  }
-#     PREREQ_PM => { Test::More=>q[0], DBI=>q[1], DBD::Pg=>q[3], PGObject::Util::PGConfig=>q[0], PGObject::Util::Replication::Slot=>q[0], Moo=>q[1] }
+#     PREREQ_PM => { PGObject::Util::Replication::Slot=>q[0], PGObject::Util::PGConfig=>q[0], Moo=>q[1], Test::More=>q[0], Test::Exception=>q[0], DBD::Pg=>q[3], DBI=>q[1] }
 #     TEST_REQUIRES => {  }
 #     VERSION_FROM => q[lib/PGObject/Util/Replication/SMO.pm]
 #     clean => { FILES=>q[PGObject-Util-Replication-SMO-*] }
@@ -62,11 +62,11 @@ DIRFILESEP = /
 DFSEP = $(DIRFILESEP)
 NAME = PGObject::Util::Replication::SMO
 NAME_SYM = PGObject_Util_Replication_SMO
-VERSION = 0.01
+VERSION = 0.02
 VERSION_MACRO = VERSION
-VERSION_SYM = 0_01
+VERSION_SYM = 0_02
 DEFINE_VERSION = -D$(VERSION_MACRO)=\"$(VERSION)\"
-XS_VERSION = 0.01
+XS_VERSION = 0.02
 XS_VERSION_MACRO = XS_VERSION
 XS_DEFINE_VERSION = -D$(XS_VERSION_MACRO)=\"$(XS_VERSION)\"
 INST_ARCHLIB = blib/arch
@@ -260,7 +260,7 @@ RCS_LABEL = rcs -Nv$(VERSION_SYM): -q
 DIST_CP = best
 DIST_DEFAULT = tardist
 DISTNAME = PGObject-Util-Replication-SMO
-DISTVNAME = PGObject-Util-Replication-SMO-0.01
+DISTVNAME = PGObject-Util-Replication-SMO-0.02
 
 
 # --- MakeMaker macro section:
@@ -442,22 +442,22 @@ clean_subdirs :
 
 clean :: clean_subdirs
 	- $(RM_F) \
-	  perl.exe $(BOOTSTRAP) \
-	  so_locations core.[0-9][0-9] \
-	  pm_to_blib.ts core.*perl.*.? \
-	  *perl.core mon.out \
-	  blibdirs.ts $(BASEEXT).def \
-	  $(BASEEXT).x *$(LIB_EXT) \
-	  tmon.out $(BASEEXT).exp \
-	  core.[0-9] perl$(EXE_EXT) \
-	  MYMETA.json $(BASEEXT).bso \
-	  MYMETA.yml perl \
-	  pm_to_blib core \
-	  $(MAKE_APERL_FILE) $(INST_ARCHAUTODIR)/extralibs.ld \
-	  $(INST_ARCHAUTODIR)/extralibs.all perlmain.c \
-	  lib$(BASEEXT).def *$(OBJ_EXT) \
-	  core.[0-9][0-9][0-9] core.[0-9][0-9][0-9][0-9][0-9] \
-	  core.[0-9][0-9][0-9][0-9] 
+	  core mon.out \
+	  perl perl$(EXE_EXT) \
+	  MYMETA.json blibdirs.ts \
+	  $(BOOTSTRAP) $(MAKE_APERL_FILE) \
+	  so_locations $(BASEEXT).x \
+	  perl.exe *$(LIB_EXT) \
+	  core.[0-9][0-9] core.[0-9][0-9][0-9] \
+	  pm_to_blib $(BASEEXT).bso \
+	  core.[0-9][0-9][0-9][0-9][0-9] $(BASEEXT).exp \
+	  $(INST_ARCHAUTODIR)/extralibs.all lib$(BASEEXT).def \
+	  $(INST_ARCHAUTODIR)/extralibs.ld core.[0-9] \
+	  pm_to_blib.ts *perl.core \
+	  $(BASEEXT).def core.[0-9][0-9][0-9][0-9] \
+	  tmon.out *$(OBJ_EXT) \
+	  core.*perl.*.? perlmain.c \
+	  MYMETA.yml 
 	- $(RM_RF) \
 	  blib PGObject-Util-Replication-SMO-* 
 	- $(MV) $(FIRST_MAKEFILE) $(MAKEFILE_OLD) $(DEV_NULL)
@@ -472,7 +472,7 @@ realclean_subdirs :
 # Delete temporary files (via clean) and also delete dist files
 realclean purge ::  clean realclean_subdirs
 	- $(RM_F) \
-	  $(MAKEFILE_OLD) $(FIRST_MAKEFILE) 
+	  $(FIRST_MAKEFILE) $(MAKEFILE_OLD) 
 	- $(RM_RF) \
 	  $(DISTVNAME) 
 
@@ -485,6 +485,7 @@ metafile : create_distdir
 	$(NOECHO) $(ECHO) 'author:' >> META_new.yml
 	$(NOECHO) $(ECHO) '  - '\''Chris Travers <chris.travers@adjust.com>'\''' >> META_new.yml
 	$(NOECHO) $(ECHO) 'build_requires:' >> META_new.yml
+	$(NOECHO) $(ECHO) '  Test::Exception: 0' >> META_new.yml
 	$(NOECHO) $(ECHO) '  Test::More: 0' >> META_new.yml
 	$(NOECHO) $(ECHO) 'configure_requires:' >> META_new.yml
 	$(NOECHO) $(ECHO) '  ExtUtils::MakeMaker: 0' >> META_new.yml
@@ -506,7 +507,7 @@ metafile : create_distdir
 	$(NOECHO) $(ECHO) '  PGObject::Util::PGConfig: 0' >> META_new.yml
 	$(NOECHO) $(ECHO) '  PGObject::Util::Replication::Slot: 0' >> META_new.yml
 	$(NOECHO) $(ECHO) '  perl: 5.006' >> META_new.yml
-	$(NOECHO) $(ECHO) 'version: 0.01' >> META_new.yml
+	$(NOECHO) $(ECHO) 'version: 0.02' >> META_new.yml
 	-$(NOECHO) $(MV) META_new.yml $(DISTVNAME)/META.yml
 	$(NOECHO) $(ECHO) Generating META.json
 	$(NOECHO) $(ECHO) '{' > META_new.json
@@ -533,6 +534,7 @@ metafile : create_distdir
 	$(NOECHO) $(ECHO) '   "prereqs" : {' >> META_new.json
 	$(NOECHO) $(ECHO) '      "build" : {' >> META_new.json
 	$(NOECHO) $(ECHO) '         "requires" : {' >> META_new.json
+	$(NOECHO) $(ECHO) '            "Test::Exception" : "0",' >> META_new.json
 	$(NOECHO) $(ECHO) '            "Test::More" : "0"' >> META_new.json
 	$(NOECHO) $(ECHO) '         }' >> META_new.json
 	$(NOECHO) $(ECHO) '      },' >> META_new.json
@@ -553,7 +555,7 @@ metafile : create_distdir
 	$(NOECHO) $(ECHO) '      }' >> META_new.json
 	$(NOECHO) $(ECHO) '   },' >> META_new.json
 	$(NOECHO) $(ECHO) '   "release_status" : "stable",' >> META_new.json
-	$(NOECHO) $(ECHO) '   "version" : "0.01"' >> META_new.json
+	$(NOECHO) $(ECHO) '   "version" : "0.02"' >> META_new.json
 	$(NOECHO) $(ECHO) '}' >> META_new.json
 	-$(NOECHO) $(MV) META_new.json $(DISTVNAME)/META.json
 
@@ -854,7 +856,7 @@ ppd :
 	$(NOECHO) $(ECHO) '    <AUTHOR>Chris Travers &lt;chris.travers@adjust.com&gt;</AUTHOR>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <IMPLEMENTATION>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <PERLCORE VERSION="5,006,0,0" />' >> $(DISTNAME).ppd
-	$(NOECHO) $(ECHO) '        <REQUIRE NAME="DBD::Pg" VERSION="3" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE VERSION="3" NAME="DBD::Pg" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE VERSION="1" NAME="DBI::" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE VERSION="1" NAME="Moo::" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE NAME="PGObject::Util::PGConfig" />' >> $(DISTNAME).ppd
