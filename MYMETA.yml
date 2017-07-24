@@ -25,4 +25,4 @@ requires:
   PGObject::Util::PGConfig: 0
   PGObject::Util::Replication::Slot: 0
   perl: 5.006
-version: 0.02
+version: 0.03
