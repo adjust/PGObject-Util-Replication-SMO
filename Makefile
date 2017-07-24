@@ -19,11 +19,11 @@
 #     MIN_PERL_VERSION => q[5.006]
 #     NAME => q[PGObject::Util::Replication::SMO]
 #     PL_FILES => {  }
-#     PREREQ_PM => { Moo=>q[1], PGObject::Util::PGConfig=>q[1], DBI=>q[1], PGObject::Util::Replication::Slot=>q[1], Test::More=>q[0] }
+#     PREREQ_PM => { Test::More=>q[0], DBI=>q[1], DBD::Pg=>q[3], PGObject::Util::PGConfig=>q[0], PGObject::Util::Replication::Slot=>q[0], Moo=>q[1] }
 #     TEST_REQUIRES => {  }
 #     VERSION_FROM => q[lib/PGObject/Util/Replication/SMO.pm]
 #     clean => { FILES=>q[PGObject-Util-Replication-SMO-*] }
-#     dist => { SUFFIX=>q[gz], COMPRESS=>q[gzip -9f] }
+#     dist => { COMPRESS=>q[gzip -9f], SUFFIX=>q[gz] }
 
 # --- MakeMaker post_initialize section:
 
@@ -442,22 +442,22 @@ clean_subdirs :
 
 clean :: clean_subdirs
 	- $(RM_F) \
-	  $(BASEEXT).exp core.[0-9][0-9] \
-	  $(MAKE_APERL_FILE) core.[0-9][0-9][0-9] \
-	  lib$(BASEEXT).def *$(LIB_EXT) \
-	  perl.exe core.*perl.*.? \
-	  *perl.core pm_to_blib.ts \
-	  MYMETA.json mon.out \
-	  $(BASEEXT).def $(BOOTSTRAP) \
-	  core.[0-9][0-9][0-9][0-9] $(BASEEXT).x \
-	  tmon.out $(INST_ARCHAUTODIR)/extralibs.ld \
-	  so_locations blibdirs.ts \
-	  core.[0-9][0-9][0-9][0-9][0-9] core \
-	  $(INST_ARCHAUTODIR)/extralibs.all pm_to_blib \
-	  MYMETA.yml core.[0-9] \
-	  $(BASEEXT).bso perl$(EXE_EXT) \
-	  perl *$(OBJ_EXT) \
-	  perlmain.c 
+	  perl.exe $(BOOTSTRAP) \
+	  so_locations core.[0-9][0-9] \
+	  pm_to_blib.ts core.*perl.*.? \
+	  *perl.core mon.out \
+	  blibdirs.ts $(BASEEXT).def \
+	  $(BASEEXT).x *$(LIB_EXT) \
+	  tmon.out $(BASEEXT).exp \
+	  core.[0-9] perl$(EXE_EXT) \
+	  MYMETA.json $(BASEEXT).bso \
+	  MYMETA.yml perl \
+	  pm_to_blib core \
+	  $(MAKE_APERL_FILE) $(INST_ARCHAUTODIR)/extralibs.ld \
+	  $(INST_ARCHAUTODIR)/extralibs.all perlmain.c \
+	  lib$(BASEEXT).def *$(OBJ_EXT) \
+	  core.[0-9][0-9][0-9] core.[0-9][0-9][0-9][0-9][0-9] \
+	  core.[0-9][0-9][0-9][0-9] 
 	- $(RM_RF) \
 	  blib PGObject-Util-Replication-SMO-* 
 	- $(MV) $(FIRST_MAKEFILE) $(MAKEFILE_OLD) $(DEV_NULL)
@@ -472,7 +472,7 @@ realclean_subdirs :
 # Delete temporary files (via clean) and also delete dist files
 realclean purge ::  clean realclean_subdirs
 	- $(RM_F) \
-	  $(FIRST_MAKEFILE) $(MAKEFILE_OLD) 
+	  $(MAKEFILE_OLD) $(FIRST_MAKEFILE) 
 	- $(RM_RF) \
 	  $(DISTVNAME) 
 
@@ -500,10 +500,11 @@ metafile : create_distdir
 	$(NOECHO) $(ECHO) '    - t' >> META_new.yml
 	$(NOECHO) $(ECHO) '    - inc' >> META_new.yml
 	$(NOECHO) $(ECHO) 'requires:' >> META_new.yml
+	$(NOECHO) $(ECHO) '  DBD::Pg: 3' >> META_new.yml
 	$(NOECHO) $(ECHO) '  DBI: 1' >> META_new.yml
 	$(NOECHO) $(ECHO) '  Moo: 1' >> META_new.yml
-	$(NOECHO) $(ECHO) '  PGObject::Util::PGConfig: 1' >> META_new.yml
-	$(NOECHO) $(ECHO) '  PGObject::Util::Replication::Slot: 1' >> META_new.yml
+	$(NOECHO) $(ECHO) '  PGObject::Util::PGConfig: 0' >> META_new.yml
+	$(NOECHO) $(ECHO) '  PGObject::Util::Replication::Slot: 0' >> META_new.yml
 	$(NOECHO) $(ECHO) '  perl: 5.006' >> META_new.yml
 	$(NOECHO) $(ECHO) 'version: 0.01' >> META_new.yml
 	-$(NOECHO) $(MV) META_new.yml $(DISTVNAME)/META.yml
@@ -542,10 +543,11 @@ metafile : create_distdir
 	$(NOECHO) $(ECHO) '      },' >> META_new.json
 	$(NOECHO) $(ECHO) '      "runtime" : {' >> META_new.json
 	$(NOECHO) $(ECHO) '         "requires" : {' >> META_new.json
+	$(NOECHO) $(ECHO) '            "DBD::Pg" : "3",' >> META_new.json
 	$(NOECHO) $(ECHO) '            "DBI" : "1",' >> META_new.json
 	$(NOECHO) $(ECHO) '            "Moo" : "1",' >> META_new.json
-	$(NOECHO) $(ECHO) '            "PGObject::Util::PGConfig" : "1",' >> META_new.json
-	$(NOECHO) $(ECHO) '            "PGObject::Util::Replication::Slot" : "1",' >> META_new.json
+	$(NOECHO) $(ECHO) '            "PGObject::Util::PGConfig" : "0",' >> META_new.json
+	$(NOECHO) $(ECHO) '            "PGObject::Util::Replication::Slot" : "0",' >> META_new.json
 	$(NOECHO) $(ECHO) '            "perl" : "5.006"' >> META_new.json
 	$(NOECHO) $(ECHO) '         }' >> META_new.json
 	$(NOECHO) $(ECHO) '      }' >> META_new.json
@@ -852,10 +854,11 @@ ppd :
 	$(NOECHO) $(ECHO) '    <AUTHOR>Chris Travers &lt;chris.travers@adjust.com&gt;</AUTHOR>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <IMPLEMENTATION>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <PERLCORE VERSION="5,006,0,0" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="DBD::Pg" VERSION="3" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <REQUIRE VERSION="1" NAME="DBI::" />' >> $(DISTNAME).ppd
-	$(NOECHO) $(ECHO) '        <REQUIRE NAME="Moo::" VERSION="1" />' >> $(DISTNAME).ppd
-	$(NOECHO) $(ECHO) '        <REQUIRE NAME="PGObject::Util::PGConfig" VERSION="1" />' >> $(DISTNAME).ppd
-	$(NOECHO) $(ECHO) '        <REQUIRE NAME="PGObject::Util::Replication::Slot" VERSION="1" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE VERSION="1" NAME="Moo::" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="PGObject::Util::PGConfig" />' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <REQUIRE NAME="PGObject::Util::Replication::Slot" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <ARCHITECTURE NAME="darwin-thread-multi-2level-5.18" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <CODEBASE HREF="" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    </IMPLEMENTATION>' >> $(DISTNAME).ppd

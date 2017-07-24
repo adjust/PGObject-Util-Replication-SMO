@@ -32,10 +32,11 @@
       },
       "runtime" : {
          "requires" : {
+            "DBD::Pg" : "3",
             "DBI" : "1",
             "Moo" : "1",
-            "PGObject::Util::PGConfig" : "1",
-            "PGObject::Util::Replication::Slot" : "1",
+            "PGObject::Util::PGConfig" : "0",
+            "PGObject::Util::Replication::Slot" : "0",
             "perl" : "5.006"
          }
       }
