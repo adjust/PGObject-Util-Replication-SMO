@@ -4,7 +4,7 @@ use Data::Dumper;
 use PGObject::Util::Replication::SMO;
 
 plan skip_all => 'DB_TESTING not set' unless $ENV{DB_TESTING};
-plan tests => 4;
+plan tests => 6;
 
 my $master = PGObject::Util::Replication::SMO->new();
 my $pmaster = PGObject::Util::Replication::SMO->new(persist_connect => 1);
@@ -39,4 +39,5 @@ is($pmaster->connect(), $pmaster->connect(), 'got a persistent connection');
 lives_ok { $master->can_manage } 'We can determine if we can manage the db';
 lives_ok { $master->is_recovering } 'We can determine if we are in recovery';
 
-
+dies_ok { $badmaster->connect } 'die if cannot connect';
+dies_ok { $badmaster->is_recovering } 'die on db calls if cannot connect';

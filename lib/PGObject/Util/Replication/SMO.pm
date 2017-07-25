@@ -15,11 +15,11 @@ PGObject::Util::Replication::SMO - Replication Server Management Objects!
 
 =head1 VERSION
 
-Version 0.03
+Version 1
 
 =cut
 
-our $VERSION = '0.03';
+our $VERSION = '1.000000';
 
 
 =head1 SYNOPSIS
@@ -120,7 +120,7 @@ Disconnect, if using persist_connect
  sub connect {
      my ($self) = @_;
      return $pdbh if $pdbh and $self->persist_connect;
-     my $dbh = DBI->connect("dbi:Pg:dbname=" . $self->dbname, $self->user, $self->password, { AutoCommit => $self->autocommit });
+     my $dbh = DBI->connect("dbi:Pg:dbname=" . $self->dbname . " port=" . $self->port, $self->user, $self->password, { AutoCommit => $self->autocommit });
      my $sth = $dbh->prepare('select pg_is_in_recovery()');
      $sth->execute;
      $pdbh = $dbh if $self->persist_connect;
